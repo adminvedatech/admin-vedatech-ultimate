@@ -24,9 +24,6 @@ public class SubCuenta extends BaseEntity {
     @Column
     private BigDecimal subAccountBalance;
 
-    @Column
-    private Boolean status;
-
     @ManyToOne()
     @JoinColumn(name="cuentas_id")
     @JsonIgnoreProperties("subCuentas")

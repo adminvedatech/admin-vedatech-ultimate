@@ -69,11 +69,6 @@ public class BankMovementCsv extends BaseEntity {
     @Column(name = "ENABLED", nullable = false)
     private boolean enabled = false;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="poliza_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Poliza poliza;
-
 
 
 }

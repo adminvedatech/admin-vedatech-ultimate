@@ -32,6 +32,7 @@ public interface InvoiceDao extends CrudRepository<Invoice, Long> {
     @Query("SELECT e FROM Invoice e where e.supplier.id =?1")
     public Invoice getInvoiceSupplierById(Long id);
 
+    public Invoice getInvoiceById(Long id);
 
     Boolean existsInvoiceByFolio(String folio);
 

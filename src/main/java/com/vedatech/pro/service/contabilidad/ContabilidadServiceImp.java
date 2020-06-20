@@ -60,7 +60,7 @@ public class ContabilidadServiceImp implements ContabilidadService {
         BankMovementRegister bankMovementRegister = new BankMovementRegister();
 
         Bank bank = bankDao.findBankByBankAccount(bankMovementFromCsv.getCuenta());
-        bankMovementRegister.setBank(bank);
+       // bankMovementRegister.setBank(bank);
         bankMovementRegister.setFecha(bankMovementFromCsv.getFecha());
         bankMovementRegister.setFechaOperacion(bankMovementFromCsv.getFechaOperacion());
         bankMovementRegister.setCodTransac(bankMovementFromCsv.getCodTransac());

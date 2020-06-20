@@ -2,9 +2,8 @@ package com.vedatech.pro.controller.bank;
 
 
 import com.vedatech.pro.model.bank.Bank;
-import com.vedatech.pro.model.bank.BankMovementRegister;
-import com.vedatech.pro.model.product.Product;
 import com.vedatech.pro.repository.bank.BankDao;
+import com.vedatech.pro.service.response.ResponseService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +21,11 @@ public class BankController {
 
     HttpHeaders headers = new HttpHeaders();
     public final BankDao bankDao;
+    public final ResponseService responseService;
 
-    public BankController(BankDao bankDao) {
+    public BankController(BankDao bankDao, ResponseService responseService) {
         this.bankDao = bankDao;
+        this.responseService = responseService;
     }
 
     @RequestMapping(value = "/add-bank", method = RequestMethod.POST)
@@ -62,11 +63,19 @@ public class BankController {
     public ResponseEntity<List<Bank>> getAllBankAccount() {
 
         List<Bank> bank = (List<Bank>) bankDao.findAll();
-        if (bank.isEmpty()) {
-            headers.set("error", "no existen movimientos a la cuentas del Cliente");
-            return new ResponseEntity<List<Bank>>(headers, HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
+        boolean resp = bank.isEmpty();
+        System.out.println("RESP " + resp);
+        if (resp == true) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Hello", "World!");
+            headers.add("Web", "javadesde0.com");
+//            headers.set("error", "no existen movimientos a la cuentas del Cliente");
+            System.out.println("VACIO");
+            return new ResponseEntity<List<Bank>>(headers,HttpStatus.SERVICE_UNAVAILABLE);//You many decide to return HttpStatus.NOT_FOUND
+        }else {
+            return new ResponseEntity<List<Bank>>(bank, HttpStatus.OK);
+
         }
-        return new ResponseEntity<List<Bank>>(bank, HttpStatus.OK);
 
     }
 

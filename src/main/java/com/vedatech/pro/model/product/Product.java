@@ -29,10 +29,10 @@ public class Product extends BaseEntity {
     public BigDecimal unitCost;
 
     @CsvBindByName
-    public String type;
+    public String category;
 
     @CsvBindByName
-    public String subType;
+    public String subCategory;
 
     public BigDecimal jauCost;
     public BigDecimal febCost;
@@ -54,8 +54,8 @@ public class Product extends BaseEntity {
                 ", productName='" + productName + '\'' +
                 ", unitPrice=" + unitPrice +
                 ", unitCost=" + unitCost +
-                ", type='" + type + '\'' +
-                ", subType='" + subType + '\'' +
+                ", category='" + category + '\'' +
+                ", subCategory='" + subCategory + '\'' +
                 '}';
     }
 }

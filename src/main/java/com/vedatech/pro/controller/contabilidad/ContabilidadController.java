@@ -4,6 +4,7 @@ package com.vedatech.pro.controller.contabilidad;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.vedatech.pro.model.contabilidad.Cuentas;
+import com.vedatech.pro.model.contabilidad.Poliza;
 import com.vedatech.pro.model.contabilidad.SubCuenta;
 import com.vedatech.pro.model.product.Product;
 import com.vedatech.pro.repository.contabilidad.CuentasDao;
@@ -12,10 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.xml.bind.JAXBException;
@@ -85,14 +83,24 @@ public class ContabilidadController {
     //-------------------Create a Bank Account--------------------------------------------------------
 
     @RequestMapping(value = "/addSubAccount", method = RequestMethod.POST)
-    public ResponseEntity<SubCuenta> createSubAccount(@RequestBody SubCuenta subAccount) {
+    public ResponseEntity<String> createSubAccount(@RequestBody SubCuenta subAccount) {
 
-        System.out.println("SUBACCOUNT " + subAccount.toString());
-        subCuentaDao.save(subAccount);
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("accepted ok","bank account is ok");
+       try {
 
-        return new ResponseEntity<SubCuenta>(headers, HttpStatus.CREATED);
+           System.out.println("SUBACCOUNT " + subAccount.toString());
+           subCuentaDao.save(subAccount);
+           HttpHeaders headers = new HttpHeaders();
+           headers.set("accepted ok","el dato se almaceno en la base de datos");
+           String message ="los datos se almacenaron en la BD";
+           return new ResponseEntity<String>(message, HttpStatus.OK);
+       }catch (Error e) {
+
+           headers.set("error al acceder a la base de datosverifique", "verifique de nuevo");
+           String message ="error al almacenar los datos";
+           return new ResponseEntity<String>(message, HttpStatus.CONFLICT);
+
+       }
+
     }
 
 
@@ -108,5 +116,40 @@ public class ContabilidadController {
         }
         return new ResponseEntity<List<SubCuenta>>(subCuentas, HttpStatus.OK);
      }
+
+    // PETICION DE BUSQUEDA DE CUENTAS  BY ID
+    @RequestMapping(value = "/get-account-by-id/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Cuentas> getCuentasById(@PathVariable(value = "id") Long id) {
+
+        System.out.println("POLIZA NUMBER "+ id);
+
+        try {
+            Cuentas cuentas = cuentasDao.findById(id).get();
+            return new ResponseEntity<Cuentas>(cuentas, HttpStatus.OK);
+        }catch (Error e){
+            Cuentas cuentas = null;
+            return new ResponseEntity<Cuentas>(cuentas, HttpStatus.CONFLICT);
+        }
+
+    }
+
+
+
+    // PETICION DE BUSQUEDA DE SUBACCOUNT BY ACCOUNT NUMBER
+    @RequestMapping(value = "/get-subaccount-by-number/{id}", method = RequestMethod.GET)
+    public ResponseEntity<SubCuenta> getBankMovementRegisterById(@PathVariable(value = "id") String id) {
+
+        System.out.println("POLIZA NUMBER "+ id);
+
+        try {
+            SubCuenta subCuenta = subCuentaDao.findSubCuentaBySubAccountNumber(id);
+            return new ResponseEntity<SubCuenta>(subCuenta, HttpStatus.OK);
+        }catch (Error e){
+            SubCuenta subCuenta = null;
+            return new ResponseEntity<SubCuenta>(subCuenta, HttpStatus.CONFLICT);
+        }
+
+    }
+
 
 }

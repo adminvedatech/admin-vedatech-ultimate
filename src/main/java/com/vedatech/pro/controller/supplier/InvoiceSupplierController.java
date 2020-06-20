@@ -53,4 +53,21 @@ public class InvoiceSupplierController {
 
 
     }
+
+
+    @RequestMapping(value = "/get-supplier-invoice-by-id/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Invoice> getSupplierInvoiceById(@PathVariable( value = "id") Long id) {
+
+        System.out.println("VALOR DE ID INVOICE SUPPLIER " + id);
+
+        try {
+            Invoice invoiceList = (Invoice) invoiceDao.getInvoiceById(id);
+            return new ResponseEntity<Invoice>(invoiceList, HttpStatus.OK);
+        }catch (Error e) {
+            headers.set("error", "no existe la Factura indicada del Proveedor");
+            return new ResponseEntity<Invoice>(headers, HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
+        }
+
+
+    }
 }

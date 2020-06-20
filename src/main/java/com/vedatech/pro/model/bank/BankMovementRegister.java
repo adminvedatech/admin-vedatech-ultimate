@@ -33,7 +33,15 @@ public class BankMovementRegister extends BaseEntity {
         public String referencia;
 
         @Column
+        public String descripcion;
+
+
+        @Column
         public String codTransac;
+
+        @Column
+        public String sucursal;
+
 
         @Column
         public BigDecimal depositos;
@@ -45,17 +53,22 @@ public class BankMovementRegister extends BaseEntity {
         public BigDecimal saldo;
 
         @Column
-        public String descripcionDetallada;
+        public String movimiento;
+
+        @Column(name = "ENABLED", nullable = false)
+        private boolean enabled = false;
+
+
 
         @Column
-        public String polizaNumber;
+        public String descripcionDetallada;
 
-        @ManyToOne(fetch= FetchType.EAGER)
-        @JoinColumn(name="bank_id")
-        @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-        Bank bank;
+//        @ManyToOne(fetch= FetchType.LAZY)
+//        @JoinColumn(name="bank_id")
+//        @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//        Bank bank;
 
-        @OneToOne(fetch = FetchType.EAGER)
+        @OneToOne(cascade = CascadeType.ALL)
         @JoinColumn(name="poliza_id")
         @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
         private Poliza poliza;

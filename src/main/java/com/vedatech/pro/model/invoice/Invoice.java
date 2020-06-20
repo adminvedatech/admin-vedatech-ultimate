@@ -1,6 +1,7 @@
 package com.vedatech.pro.model.invoice;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vedatech.pro.model.BaseEntity;
+import com.vedatech.pro.model.contabilidad.Poliza;
 import com.vedatech.pro.model.customer.Customer;
 import com.vedatech.pro.model.product.Product;
 import com.vedatech.pro.model.supplier.Supplier;
@@ -32,6 +33,11 @@ public class Invoice extends BaseEntity {
     private BigDecimal pago;
     private String folio;
     private Boolean payment;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="poliza_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Poliza poliza;
 
     @ManyToOne(fetch= FetchType.EAGER)
     @JoinColumn(name="customer_id")

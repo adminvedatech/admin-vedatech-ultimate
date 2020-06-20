@@ -2,6 +2,7 @@ package com.vedatech.pro.model.contabilidad;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vedatech.pro.model.BaseEntity;
+import com.vedatech.pro.model.bank.BankMovementCsv;
 import com.vedatech.pro.model.bank.BankMovementRegister;
 import com.vedatech.pro.model.invoice.Invoice;
 import lombok.Getter;
@@ -43,6 +44,11 @@ public class Poliza extends BaseEntity {
 //    @JoinColumn(name="invoices_id")
 //    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 //    Invoice invoice;
+
+ //   @OneToOne(mappedBy = "poliza")
+  // @JoinColumn(name="bank_movement_id")
+ //   @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//    private BankMovementRegister bankMovementRegister;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "poliza_id")

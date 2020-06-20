@@ -3,8 +3,10 @@ package com.vedatech.pro.controller;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import com.vedatech.pro.model.product.Category;
 import com.vedatech.pro.model.product.Product;
 import com.vedatech.pro.model.production.Production;
+import com.vedatech.pro.repository.product.CategoryDao;
 import com.vedatech.pro.repository.product.ProductDao;
 import com.vedatech.pro.repository.production.ProductionDao;
 import com.vedatech.pro.service.wharehouse.MovementsWharehouseService;
@@ -30,11 +32,13 @@ public class ProductionController {
     public final ProductDao productDao;
     public final ProductionDao productionDao;
     public final MovementsWharehouseService wharehouseService;
+    public final CategoryDao categoryDao;
 
-    public ProductionController(ProductDao productDao, ProductionDao productionDao, MovementsWharehouseService wharehouseService) {
+    public ProductionController(ProductDao productDao, ProductionDao productionDao, MovementsWharehouseService wharehouseService, CategoryDao categoryDao) {
         this.productDao = productDao;
         this.productionDao = productionDao;
         this.wharehouseService = wharehouseService;
+        this.categoryDao = categoryDao;
     }
 
     @RequestMapping(value = "/upload-service", method = RequestMethod.POST)
@@ -104,6 +108,25 @@ public class ProductionController {
 
     }
 
+
+    @RequestMapping(value = "/add-category", method = RequestMethod.POST)
+    public ResponseEntity<String> createCategory(@RequestBody Category category) {
+        System.out.println("Creating Category " + category.getCatName());
+
+        if(categoryDao.findBycatName(category.getCatName())){
+            String message = "La Categoria ya existe";
+            return new ResponseEntity<String>(message, HttpStatus.CONFLICT);
+
+        }else {
+            categoryDao.save(category);
+            String message = "La Categoria se agrego a la base de datos";
+            return new ResponseEntity <String> (message,HttpStatus.OK);
+
+        }
+
+    }
+
+
     //  UPDATE PORDUCT
     @RequestMapping(value = "/update-product", method = RequestMethod.PUT)
     public ResponseEntity<String> updateSupplier(@RequestBody Product product) {
@@ -166,6 +189,19 @@ public class ProductionController {
 
         this.wharehouseService.sendProductionAlmacen(production);
    }
+
+
+    @RequestMapping(value = "/get-all-productions", method = RequestMethod.GET)
+    public ResponseEntity<List<Production>> getAllProductions() {
+
+        List<Production> productions = (List<Production>) productionDao.findAll();
+        if (productions.isEmpty()) {
+            headers.set("error", "no existen movimientos");
+            return new ResponseEntity<List<Production>>(headers, HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
+        }
+        return new ResponseEntity<List<Production>>(productions, HttpStatus.OK);
+
+    }
 
 
 
