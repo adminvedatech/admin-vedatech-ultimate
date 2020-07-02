@@ -1,8 +1,10 @@
 package com.vedatech.pro.repository.invoice;
 
 import com.vedatech.pro.model.invoice.Invoice;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +17,7 @@ public interface InvoiceDao extends CrudRepository<Invoice, Long> {
     public Invoice findInvoiceById(Long id);
 
     @Query("SELECT e FROM Invoice e where e.supplier.id > 0")
-    public List<Invoice> findAllInvoicesBySupplier();
+    public List<Invoice> findAllInvoicesBySupplier(Pageable pageable);
 
 //    @Query("SELECT e FROM Invoice e GROUP BY e.supplier")
 //    public List<Invoice> findAllInvoicesBySupplier();
@@ -42,5 +44,8 @@ public interface InvoiceDao extends CrudRepository<Invoice, Long> {
     //public List<Invoice> findAllByPolizas_Empty();
 
     // public List<Invoice> findAllByPolizas_EmptyAndCustomerId(Long id);
+
+    List<Invoice> findAll(
+            @Param("movie") String movieName, Pageable pageable);
 
 }

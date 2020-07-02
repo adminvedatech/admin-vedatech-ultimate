@@ -5,9 +5,11 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.vedatech.pro.model.product.Category;
 import com.vedatech.pro.model.product.Product;
+import com.vedatech.pro.model.product.SubCategory;
 import com.vedatech.pro.model.production.Production;
 import com.vedatech.pro.repository.product.CategoryDao;
 import com.vedatech.pro.repository.product.ProductDao;
+import com.vedatech.pro.repository.product.SubCategoryDao;
 import com.vedatech.pro.repository.production.ProductionDao;
 import com.vedatech.pro.service.wharehouse.MovementsWharehouseService;
 import org.springframework.http.HttpHeaders;
@@ -33,12 +35,14 @@ public class ProductionController {
     public final ProductionDao productionDao;
     public final MovementsWharehouseService wharehouseService;
     public final CategoryDao categoryDao;
+    public final SubCategoryDao subCategoryDao;
 
-    public ProductionController(ProductDao productDao, ProductionDao productionDao, MovementsWharehouseService wharehouseService, CategoryDao categoryDao) {
+    public ProductionController(ProductDao productDao, ProductionDao productionDao, MovementsWharehouseService wharehouseService, CategoryDao categoryDao, SubCategoryDao subCategoryDao) {
         this.productDao = productDao;
         this.productionDao = productionDao;
         this.wharehouseService = wharehouseService;
         this.categoryDao = categoryDao;
+        this.subCategoryDao = subCategoryDao;
     }
 
     @RequestMapping(value = "/upload-service", method = RequestMethod.POST)
@@ -113,12 +117,32 @@ public class ProductionController {
     public ResponseEntity<String> createCategory(@RequestBody Category category) {
         System.out.println("Creating Category " + category.getCatName());
 
-        if(categoryDao.findBycatName(category.getCatName())){
+        if(categoryDao.existsByCatName(category.getCatName())){
+
             String message = "La Categoria ya existe";
             return new ResponseEntity<String>(message, HttpStatus.CONFLICT);
 
         }else {
             categoryDao.save(category);
+            String message = "La Categoria se agrego a la base de datos";
+            return new ResponseEntity <String> (message,HttpStatus.OK);
+
+        }
+
+    }
+
+
+    @RequestMapping(value = "/add-subcategory", method = RequestMethod.POST)
+    public ResponseEntity<String> createSubCategory(@RequestBody SubCategory subCategory) {
+        System.out.println("Creating Category " + subCategory.getSubCatName());
+
+        if(subCategoryDao.existsBySubCatName(subCategory.getSubCatName())){
+
+            String message = "La Categoria ya existe";
+            return new ResponseEntity<String>(message, HttpStatus.CONFLICT);
+
+        }else {
+            subCategoryDao.save(subCategory);
             String message = "La Categoria se agrego a la base de datos";
             return new ResponseEntity <String> (message,HttpStatus.OK);
 
@@ -151,6 +175,33 @@ public class ProductionController {
         return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
 
     }
+
+
+    @RequestMapping(value = "/get-categories", method = RequestMethod.GET)
+    public ResponseEntity<List<Category>> getCategories() {
+
+        List<Category> categories = (List<Category>) categoryDao.findAll();
+        if (categories.isEmpty()) {
+            headers.set("error", "no existen categorias");
+            return new ResponseEntity<List<Category>>(headers, HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
+        }
+        return new ResponseEntity<List<Category>>(categories, HttpStatus.OK);
+
+    }
+
+
+    @RequestMapping(value = "/get-subcategories", method = RequestMethod.GET)
+    public ResponseEntity<List<SubCategory>> getSubCategories() {
+
+        List<SubCategory> subCategories = (List<SubCategory>) subCategoryDao.findAll();
+        if (subCategories.isEmpty()) {
+            headers.set("error", "no existen subcategorias");
+            return new ResponseEntity<List<SubCategory>>(headers, HttpStatus.NO_CONTENT);//You many decide to return HttpStatus.NOT_FOUND
+        }
+        return new ResponseEntity<List<SubCategory>>(subCategories, HttpStatus.OK);
+
+    }
+
 
     // PETICION DE BUSQUEDA DE SUPPLIER BY ID
     @RequestMapping(value = "/get-product/{id}", method = RequestMethod.GET)

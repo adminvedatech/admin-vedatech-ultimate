@@ -29,9 +29,11 @@ public class Invoice extends BaseEntity {
     private String nombreArchivo;
     private BigDecimal subTotal;
     private BigDecimal impuesto;
+    private BigDecimal descuento;
     private BigDecimal total;
     private BigDecimal pago;
     private String folio;
+    private String serie;
     private Boolean payment;
 
     @OneToOne(fetch = FetchType.EAGER)

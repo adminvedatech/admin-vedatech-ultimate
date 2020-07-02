@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<cfdi:Comprobante xmlns:cfdi="http://www.sat.gob.mx/cfd/3" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd" version="3.2" folio="4012" fecha="2015-07-06T10:52:13" sello="DXLi5IUROK1/yxQ9EOd4V8wNl0mPjFSeurss7y7Htkzo1SgbSWsTBKu2LF8oDlyJtOuCdsB2evtaxfuw9l1PLSN0nvpk+4gP2xyfuszvg+BHBdVXKRmGVJlvU4YJhVJ9C2Me63jOllzG6k39+99M7BIH9Dja/N98ksjkqOlIUMA=" formaDePago="PAGO EN UNA SOLA EXHIBICION" noCertificado="00001000000202694779" certificado="MIIEmDCCA4CgAwIBAgIUMDAwMDEwMDAwMDAyMDI2OTQ3NzkwDQYJKoZIhvcNAQEFBQAwggGVMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJhY2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3RyYWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBTZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMSEwHwYJKoZIhvcNAQkBFhJhc2lzbmV0QHNhdC5nb2IubXgxJjAkBgNVBAkMHUF2LiBIaWRhbGdvIDc3LCBDb2wuIEd1ZXJyZXJvMQ4wDAYDVQQRDAUwNjMwMDELMAkGA1UEBhMCTVgxGTAXBgNVBAgMEERpc3RyaXRvIEZlZGVyYWwxFDASBgNVBAcMC0N1YXVodMOpbW9jMRUwEwYDVQQtEwxTQVQ5NzA3MDFOTjMxPjA8BgkqhkiG9w0BCQIML1Jlc3BvbnNhYmxlOiBDZWNpbGlhIEd1aWxsZXJtaW5hIEdhcmPDrWEgR3VlcnJhMB4XDTEyMTIyNjIxMTUzOFoXDTE2MTIyNjIxMTUzOFowgdkxKTAnBgNVBAMTIEJPTFNBUyBZIEVNUEFRVUVTIERJQ0FSIFNBIERFIENWMSkwJwYDVQQpEyBCT0xTQVMgWSBFTVBBUVVFUyBESUNBUiBTQSBERSBDVjEpMCcGA1UEChMgQk9MU0FTIFkgRU1QQVFVRVMgRElDQVIgU0EgREUgQ1YxJTAjBgNVBC0THEJFRDA5MDMyMEJKQSAvIFZJTkM0NzA3MTZJRDYxHjAcBgNVBAUTFSAvIFZJTkM0NzA3MTZITkxMVlIwNzEPMA0GA1UECxMGVU5JREFEMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCr+fpyt2ExjBVMcJhPNdNVMNP5k4OE79U+ge4rSvsf4VbfyHmgwdRjkkPURn/z3VjYs49TJGCs7YqF4Tbm5+4Qypjr6hFb6jBZXwSlH1CnlyOnJ2sNhvbHYtHj3K6ASObyhGJi096nsRcp0ViHzg5mhsJAVgx052y1BcB74vfT3QIDAQABox0wGzAMBgNVHRMBAf8EAjAAMAsGA1UdDwQEAwIGwDANBgkqhkiG9w0BAQUFAAOCAQEAaV9XFUscfeCcIh+Vn+l9rNG0Qd5Ak9sJjHChtYQcvn2+7pd50SWh9kqiXAZqzLKuWvTFy+lXPm6pNSJt5yBUIBjk0OPW5n5iZJtOFZb+NoqgWyitHDw777aFdIl+dcKTXZO9kJQvfSsU3X7BMqu3Xq0hmqsD38Nd3qWoziFhh+sQcgQG3JuHPc8fZSZIAD2laT310yQyl6T5VjDb7ukUXzEqyj8Ng8UvZfnkZf5kLG3Gu3Zq1iydJrFqmtrzpUyW22WdoETHqAYqiBI2nbPTbGd1p9fszcdNjFGAzv2jd3qHNNxzRn4D7jHWQNLKCesCfPbI7pwK+uOhVg7nHye4iw==" subTotal="5030.00" TipoCambio="1.00" Moneda="Peso Mexicano" total="5834.80" tipoDeComprobante="ingreso" metodoDePago="No Identificado" LugarExpedicion="COLORIN 813 , MIRASOL, 64100, MONTERREY, MONTERREY, N.L., MEXICO">
+	<cfdi:Emisor rfc="BED090320BJA" nombre="BOLSAS Y EMPAQUES DICAR S.A. DE C.V.">
+		<cfdi:DomicilioFiscal calle="COLORIN" noExterior="813" colonia="MIRASOL" localidad="MONTERREY" municipio="MONTERREY" estado="N.L." pais="MEXICO" codigoPostal="64100"/>
+		<cfdi:RegimenFiscal Regimen="Regimen Fiscal General de Ley Personas Morales"/>
+	</cfdi:Emisor>
+	<cfdi:Receptor rfc="ANT021004RI7" nombre="ALIMENTOS NATURALES DE TRIGO GERMINADO, S.A. DE C.V.">
+		<cfdi:Domicilio calle="GONZALITOS" noExterior="408" colonia="LAS PUENTES PRIMER SECTOR" localidad="MONTERREY" estado="NUEVO LEON" pais="MEXICO" codigoPostal="66460"/>
+	</cfdi:Receptor>
+	<cfdi:Conceptos>
+		<cfdi:Concepto cantidad="10.00" unidad="MILLAR" noIdentificacion="780" descripcion="BOLSAS DE POLIP. 12 X 8.5 X 42 C-35" valorUnitario="398.00" importe="3980.00"/>
+		<cfdi:Concepto cantidad="5.00" unidad="MILLAR" noIdentificacion="843" descripcion="BOLSAS DE POLIP. 19 X 26 C-35" valorUnitario="210.00" importe="1050.00"/>
+	</cfdi:Conceptos>
+	<cfdi:Impuestos totalImpuestosTrasladados="804.80">
+		<cfdi:Traslados>
+			<cfdi:Traslado impuesto="IVA" tasa="16.00" importe="804.80"/>
+		</cfdi:Traslados>
+	</cfdi:Impuestos>
+	<cfdi:Complemento>
+		<tfd:TimbreFiscalDigital xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" 
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/TimbreFiscalDigital/TimbreFiscalDigital.xsd" selloCFD="DXLi5IUROK1/yxQ9EOd4V8wNl0mPjFSeurss7y7Htkzo1SgbSWsTBKu2LF8oDlyJtOuCdsB2evtaxfuw9l1PLSN0nvpk+4gP2xyfuszvg+BHBdVXKRmGVJlvU4YJhVJ9C2Me63jOllzG6k39+99M7BIH9Dja/N98ksjkqOlIUMA=" FechaTimbrado="2015-07-06T10:54:33" UUID="68E43768-EB1A-4985-B6D9-5747C56090E9" noCertificadoSAT="00001000000202864883" version="1.0" selloSAT="JQ9LQFp8tEX9zs5yW45HeUS8S0yFvdCN9lNCHLwaRLDyodvxom0Yd9rcXMeBWKMDUq3NQ3QbAxNpDQCAG5NfOBYiyBuJbbmfzJkGmaAMsvDvC5u+WqEX1E8QFapdWkDbPyG0COkWQP6ZSAXZ7NNebDoCXbf0xzmPKybCmOlMO6o="/>
+	</cfdi:Complemento>
+</cfdi:Comprobante>

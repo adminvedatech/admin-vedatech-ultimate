@@ -38,7 +38,7 @@ public class UploadInvoiceSupplierController {
 
         try {
           //  comprobante = new String(file.getBytes(), "UTF-8");
-            Comprobante unmarshalComprobante = unmarshallerService.contextFile(Comprobante.class, comprobante);
+       //     Comprobante unmarshalComprobante = unmarshallerService.contextFile(Comprobante.class, comprobante);
 
         //    System.out.println("UNMARSHALLER " + unmarshalComprobante.getFolio());
 //            if (!validateService.isValidSupplierInvoice(unmarshalComprobante)) {

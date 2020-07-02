@@ -9,27 +9,29 @@ import com.vedatech.pro.repository.invoice.InvoiceDao;
 import com.vedatech.pro.repository.supplier.SupplierDao;
 import com.vedatech.pro.service.CfdiService;
 //import io.reactivex.Flowable;
+import com.vedatech.pro.service.unmarshaller.UnmarshallerService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
-import org.apache.commons.io.FileUtils;
+
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.w3c.dom.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 
 @RestController
 @RequestMapping("/api/invoice")
@@ -39,12 +41,14 @@ public class InvoiceController {
     public final CustomerDao customerDao;
     public final SupplierDao supplierDao;
     public final InvoiceDao invoiceDao;
+    public final UnmarshallerService unmarshallerService;
 
-    public InvoiceController(CfdiService cfdiService, CustomerDao customerDao, SupplierDao supplierDao, InvoiceDao invoiceDao) {
+    public InvoiceController(CfdiService cfdiService, CustomerDao customerDao, SupplierDao supplierDao, InvoiceDao invoiceDao, UnmarshallerService unmarshallerService) {
         this.cfdiService = cfdiService;
         this.customerDao = customerDao;
         this.supplierDao = supplierDao;
         this.invoiceDao = invoiceDao;
+        this.unmarshallerService = unmarshallerService;
     }
 
     HttpHeaders headers = new HttpHeaders();
@@ -121,20 +125,159 @@ public class InvoiceController {
 
     //-------------------Received Xml Supplier File--------------------------------------------------------
     @RequestMapping(value = "/supplier-xml-file", consumes = MediaType.APPLICATION_XML_VALUE)
-    public ResponseEntity<String> supplierXmlInvoice(@RequestBody String comprobante) throws JAXBException {
+    public ResponseEntity<String> supplierXmlInvoice(@RequestBody String comprobante) throws JAXBException, ParserConfigurationException, IOException, SAXException {
 
         String receptorRfc = "ANT021004RI7";
         Customer customer = new Customer();
         Invoice invoice = new Invoice();
         String message = "";
-
-            Comprobante unmarshalComprobante =  cfdiService.contextFileSupplier( comprobante);
-            System.out.println("INVOICE CONTROLLER SUPPLIER " + unmarshalComprobante.getEmisor().getNombre());
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+//an instance of builder to parse the specified xml file
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.parse(comprobante);
+        doc.getDocumentElement().normalize();
+        System.out.println("Root element: " + doc.getDocumentElement().getNodeName());
+     //   Comprobante unmarshalComprobante =  cfdiService.contextFileSupplier( comprobante);
+      //      System.out.println("INVOICE CONTROLLER SUPPLIER " + unmarshalComprobante.getEmisor().getNombre());
 
         message="pues aaaahhh que la chingada";
          return ResponseEntity.status(HttpStatus.OK).body(message);
 
 
+    }
+
+
+    //-------------------Received Xml Supplier File--------------------------------------------------------
+    @RequestMapping(value = "/supplier-xml-file-ii",  method = RequestMethod.POST)
+    public ResponseEntity<String> supplierXmlInvoiceII(@RequestParam("file") MultipartFile file) throws JAXBException {
+
+      //  String receptorRfc = "ANT021004RI7";
+        String comprobante = "";
+    //    Customer customer = new Customer();
+    //    Invoice invoice = new Invoice();
+    //    String message = "";
+        try {
+
+            comprobante = new String(file.getBytes(), "UTF-8");
+            System.out.println("COMPROBANTE " + comprobante);
+           File file1 = convert(file);
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+//an instance of builder to parse the specified xml file
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(file1);
+            doc.getDocumentElement().normalize();
+            System.out.println("Root element: " + doc.getDocumentElement().getNodeName());
+            System.out.println("Root element: " + doc.getDocumentElement().getTagName());
+            System.out.println("Root element: " + doc.getDocumentElement().getTagName());
+            System.out.println("Root element: " + doc.getElementsByTagName("cfdi:Emisor"));
+
+
+
+            NodeList nodeList = doc.getElementsByTagName("cfdi:Conceptos");
+            Node basenode = nodeList.item(0);
+
+            NodeList children = basenode.getChildNodes();
+            for (int i = 0; i < children.getLength(); i++) {
+                Node item = children.item(i);
+                if (item.getNodeType() == Node.ELEMENT_NODE) {
+                    System.out.println("ATTRIBUTES " + item.getNodeName() + getAttributesAsString(item.getAttributes()));
+
+                }
+            }
+
+
+
+
+
+
+
+          //  Attributes attributes = (Attributes) doc.getElementsByTagName("cfdi:Emisor");
+          ///  System.out.println("ATTRIBUTES " + attributes.getValue("rfc"));
+
+            System.out.println("LENGTH: " + nodeList.getLength());
+// nodeList is not iterable, so we are using for loop
+            for (int itr = 0; itr < nodeList.getLength(); itr++)
+            {
+                Node node = nodeList.item(itr);
+                System.out.println("\nNode Name :" + node.hasAttributes());
+
+                if (node.hasAttributes())
+                {
+                    Element eElement = (Element) node;
+                    listAllAttributes(eElement);
+                    System.out.println("Student id: "+ eElement.getAttribute("rfc"));
+                    System.out.println("Student id: "+ ((Element) node).getAttribute("rfc"));
+                    System.out.println("Student id: "+      ((Element) node).getAttributeNode("rfc"));
+                }
+            }
+
+        } catch (IOException | ParserConfigurationException | SAXException e) {
+            e.printStackTrace();
+            String message="error primer catch";
+            return ResponseEntity.status(HttpStatus.OK).body(message);
+        }
+
+        try {
+            Comprobante unmarshalComprobante = (Comprobante) unmarshallerService.contextFile(Comprobante.class, comprobante);
+
+          //  System.out.println("UNMARSHALLER " + unmarshalComprobante.getEmisor());
+            System.out.println("Tuvimos un null");
+            if(unmarshalComprobante != null ){
+                System.out.println("EL ARCHIVO PASO");
+            }else {
+                String message="la Factura de compra en XML no puede ser procesado, hagalo manulamente";
+                return ResponseEntity.status(HttpStatus.HTTP_VERSION_NOT_SUPPORTED).body(message);
+            }
+
+        }catch (Error error){
+
+            String message="error segundo catch";
+            return ResponseEntity.status(HttpStatus.OK).body(message);
+
+        }
+        Comprobante unmarshalComprobante =  cfdiService.contextFileSupplier( comprobante);
+        System.out.println("INVOICE CONTROLLER SUPPLIER " + unmarshalComprobante.getEmisor().getNombre());
+
+
+
+
+       String message="llego bien el archivo";
+        return ResponseEntity.status(HttpStatus.OK).body(message);
+
+
+    }
+
+
+    private String getAttributesAsString(NamedNodeMap attributes) {
+        StringBuilder sb = new StringBuilder("\n");
+        for (int j = 0; j < attributes.getLength(); j++) {
+            sb.append("\t- ").append(attributes.item(j).getNodeName()).append(": ").append(attributes.item(j).getNodeValue()).append("\n");
+        }
+        return sb.toString();
+
+    }
+
+
+    public static void listAllAttributes(Element element) {
+
+        System.out.println("List attributes for node: " + element.getNodeName());
+
+        // get a map containing the attributes of this node
+        NamedNodeMap attributes = element.getAttributes();
+
+        // get the number of nodes in this map
+
+        int numAttrs = attributes.getLength();
+
+
+        for (int i = 0; i < numAttrs; i++) {
+            Attr attr = (Attr) attributes.item(i);
+            String attrName = attr.getNodeName();
+
+            String attrValue = attr.getNodeValue();
+            System.out.println("Found attribute: " + attrName + " with value: " + attrValue);
+
+        }
     }
 
 
@@ -194,7 +337,11 @@ public class InvoiceController {
     }
 
     @RequestMapping(value = "/get-customer-invoice", method = RequestMethod.GET)
-    public ResponseEntity<List<Invoice>> getAllBankTransaction() {
+    public ResponseEntity<List<Invoice>> getAllBankTransaction(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
 
         List<Invoice> invoiceList = (List<Invoice>) invoiceDao.findAllInvoicesByCustomer();
         if (invoiceList.isEmpty()) {
